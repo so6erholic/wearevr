@@ -1,0 +1,25 @@
+{
+  "name": "naf-tutorial",
+  "version": "1.0.0",
+  "description": "My first multi-user virtual reality",
+  "scripts": {
+    "start": "node ./server/index.js"
+  },
+  "author": "YOUR_NAME",
+  "dependencies": {
+    "jquery": "^3.5.1",
+    "jquery-json": "^2.6.0",
+    "networked-aframe": "^0.7.0",
+    "open-easyrtc": "^2.0.5",
+    "stats.js": "^0.17.0",
+    "three": "^0.119.1",
+    "verto": "^0.1.1"
+  }
+
+"publishConfig": { "registry": "https://npm.pkg.github.com/" }
+
+$ npm login --registry=https://npm.pkg.github.com/
+
+// Step 3: Publish
+$ npm publish
+}

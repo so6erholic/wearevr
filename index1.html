@@ -1,0 +1,278 @@
+<html>
+<head> 
+    
+    <!-- Initialize Favicon --> 
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+        <title>WeAreVR</title>
+     <!-- Initialize Libraries and dependencies --> 
+        <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.slim.js"></script>
+        <script src="https://cdn.rawgit.com/mrturck/aframe-joystick/master/joystick.min.js"></script>
+        <script>window.NAF || document.write('<script src="https://unpkg.com/networked-aframe/dist/networked-aframe.min.js">\x3C/script>')</script>
+        <script src="https://unpkg.com/aframe-randomizer-components@^3.0.1/dist/aframe-randomizer-components.min.js"></script>
+        <script src="/js/spawn-in-circle.component.js"></script>
+        <script src="https://rawgit.com/oscarmarinmiro/aframe-video-controls/master/dist/aframe-video-controls.min.js"></script>
+          
+     <script src="js/easyrtc.js"></script>
+     <script src="js/video-transport.js"></script>
+    
+    
+              <script>
+                  // Custom component for video playback
+            AFRAME.registerComponent('playorpause', {
+                init: function () {
+                    var video = document.querySelector('#video');
+
+                    var vc = document.querySelector('#vc');
+                    this.el.addEventListener('click', function () {
+                        if (video.paused) {
+                            video.play();
+
+                            vc.setAttribute('src', '#pause');
+                        } else {
+                            video.pause();
+                            vc.setAttribute('src', '#play');
+                        }
+                    });
+                }
+            });
+
+        </script>
+          
+
+
+<script>
+// Calculation of FPS and other adaptive resolution parameters
+const td = [];
+let fps;
+var i = 1;
+function gcd (a, b) {
+    return (b == 0) ? a : gcd (b, a%b);
+        }
+        var w = screen.width*window.devicePixelRatio;
+        var h = screen.height*window.devicePixelRatio;
+        var x = (screen.width/screen.height).toFixed(2);
+        var r = gcd (w, h);
+		var num = w/r;
+		var den = h/r;
+function timeloop() {
+  const t1 = performance.now(); 
+  window.requestAnimationFrame(() => {
+  const now = performance.now();
+    while (td.length > 0 && td[0] <= now - 1000) {
+      td.shift();
+    }
+    td.push(now);
+      fps = (td.length);
+      console.log(i++ + " " + (now - t1).toFixed(1));
+    //  sceneEl = document.querySelector('a-scene');
+    //  if(x < 1){
+      //sceneEl.maxCanvasSize = {height: h/2 , width: w/2};
+     //}
+      //else
+     //{sceneEl.maxCanvasSize = {height: fps*den, width: fps*num};}
+      timeloop();
+  });
+}
+timeloop();
+var timer = Date.now();
+    setInterval(function() {
+    var elapsedTime = Date.now() - timer;
+   //console.log((elapsedTime / 1000).toFixed(2) + " " + fps);
+}, 1000);
+</script>
+        
+
+      </head>
+      <body>
+           <!-- The VR Scene --> 
+        <a-scene stats joystick networked-scene="
+          room: rishabh's room;
+          debug: true;
+          connectOnLoad: true;
+          adapter: webrtc;
+          audio: true;" 
+          maxCanvasSize=timeloop();>
+
+        <a-assets timeout = "30000">
+
+            <img id="play" src="Textures/Play%20button.png">
+            <img id="pause" src="Textures/Pause%20button.png">
+            <img id="floor" src="Textures/floor.jpg">
+            <img id="floor-NRM" src ="Textures/floorNM.png">
+            <audio id ="dino" src = "audio/Ice%20Age%203%20-%20Momma%20Sound%20Effects.mp3"></audio>
+            <a-asset-item id="your-3Dmodel-01" src="archive/model.gltf"></a-asset-item>
+            <a-asset-item id="your-3Dmodel-02" src="archive/scene.gltf"></a-asset-item>
+            <video id="video" src="video/BigBuckBunny.mp4" crossorigin="anonymous" playsinline="playsinline" loop></video>
+
+            <!-- Templates - Source: @machenmusik - glitch-->
+        <template id="singleton-template">
+           <a-entity video-controls="src:#video">
+    <a-image src="https://res.cloudinary.com/dxbh0pppv/image/upload/c_scale,h_512,q_10/v1471016296/play_wvmogo.png" height="0.25" width="0.25" position="0.69261 -0.12198 1.52216" material="" geometry="" rotation="0 270 0"></a-image>
+    <a-plane color="#000" height="0.25" width="1" position="0.79196 -0.14834 1.99008" material="" geometry="" rotation="0 270 0"></a-plane>
+ <a-video video-transport="currentTime: 7.550169" class="front" material="side: front" src="#video" width="1.16" height="1" position="0.96053 0.18937 2.21836" rotation="0 270 0" geometry="height: 0.5" scale="1.01 1.4 0.00001">
+                
+            
+               <a-image id="vc" src="#play" position="-0.0064 -0.29876 10192.55327" scale="0.16 0.11 0.6" playorpause="" material="" geometry="" rotation="0 0 360">
+            </a-image>
+            </a-video>
+                
+            
+     
+          </a-entity>
+        </template>
+            <!-- Avatar Source: Networked A-frame -->
+            <template id="avatar-template">
+              <a-entity class="avatar" networked-audio-source>
+                <a-sphere class="head"
+                  color="#ffffff"
+                  scale="0.45 0.5 0.4"
+                ></a-sphere>
+                <a-entity class="face"
+                  position="0 0.05 0"
+                >
+                  <a-sphere class="eye"
+                    color="#efefef"
+                    position="0.16 0.1 -0.35"
+                    scale="0.12 0.12 0.12"
+                  >
+                    <a-sphere class="pupil"
+                      color="#000"
+                      position="0 0 -1"
+                      scale="0.2 0.2 0.2"
+                    ></a-sphere>
+                  </a-sphere>
+                  <a-sphere class="eye"
+                    color="#efefef"
+                    position="-0.16 0.1 -0.35"
+                    scale="0.12 0.12 0.12"
+                  >
+                    <a-sphere class="pupil"
+                      color="#000"
+                      position="0 0 -1"
+                      scale="0.2 0.2 0.2"
+                    ></a-sphere>
+                  </a-sphere>
+                </a-entity>
+              </a-entity>
+            </template>
+
+          </a-assets>
+
+
+<a-sky src = "Textures/forest.jpg"></a-sky>
+<a-entity camera="active: true" id="camera" position="0.00027 1.6 5.16431" look-controls="" wasd-controls="" rotation="" data-aframe-inspector-original-camera="">
+        <a-cursor material="color: #000080" ;="" raycaster="" cursor="" geometry=""></a-cursor>
+     </a-entity>
+            
+            
+               <a-entity class="singleton"
+                          position="0 0 -1" 
+                          networked="template:#singleton-template;networkId:singleton;owner:nobody;">
+                </a-entity>
+        
+            
+          <a-entity id="player"
+            networked="template:#avatar-template;attachTemplateToLocal:false;"
+            camera
+            position="0 1.6 0"
+            spawn-in-circle="radius:3"
+            wasd-controls look-controls
+            >
+            <a-sphere class="head"
+              visible="false"
+              random-color
+            ></a-sphere>
+          </a-entity>
+
+        <a-plane position = "0 1.2 0" material="color: #FFFFFF;
+                                   src: #floor;
+                                   repeat: 50 50;
+                                   normal-map: #floor-NRM;
+                                   normal-texture-repeat: 50 50"
+                         rotation="-90 0 0"
+
+                         scale="100 100 1">
+            <a-entity light="type: ambient; intensity: 0.3">
+            </a-entity>>
+            </a-plane>
+
+            <a-plane position="0.04206 1.71912 1.07119" src="Textures/Ice_Age_Dawn_of_the_Dinosaurs_logo.svg.png" material="" geometry="height: 0.9; width: 2">
+
+                </a-plane>
+                <a-entity light = "type: ambient; intensity: 0.15" position ="0 -0.1 0" gltf-model="#your-3Dmodel-01">
+                </a-entity>
+
+
+              <a-entity position="1.99115 1.25704 1.79087" gltf-model="#your-3Dmodel-02" rotation="0 290 0" sound = "src: #dino; on: click">    
+                </a-entity>
+            <a-entity light="type: point; intensity: 0.6; distance: 10" position="6.96111 1.54469 0.83246">
+            </a-entity>
+          </a-scene>
+
+     <script>
+        NAF.schemas.add({
+        template: '#singleton-template',
+        components: [
+          'position',
+          'rotation',          
+          {
+            selector: '.front',
+            component: 'video-transport',
+            property: 'currentTime'
+          },
+          
+          {
+            selector: '.front',
+            component: 'video-transport',
+            property: 'paused'
+          }
+        ]
+      });
+   
+    </script>
+
+        <script>
+          NAF.schemas.add({
+            template: '#avatar-template',
+            components: [
+              'position',
+              'rotation',
+              {
+                selector: '.head',
+                component: 'material',
+                property: 'color'
+              }
+            ]
+          });
+
+        </script>
+            <script>      
+      function onConnect () {
+
+                
+        console.warn('onConnect() ', new Date());
+        
+        var lonerTimeout = setTimeout(function() {
+
+          Array.prototype.slice.call(document.querySelectorAll('.singleton[networked]'))
+            .map(function (el) {
+
+              el.setAttribute('networked', 'owner', NAF.clientId);
+              console.warn('Took ownership as ', NAF.clientId, ' of ', el);
+            });
+        }, 500);
+        
+        document.body.addEventListener('clientConnected', function (evt) {
+          console.warn('clientConnected ', evt.detail.clientId);          
+          clearTimeout(lonerTimeout);
+        });
+        
+        document.body.addEventListener('clientDisconnected', function (evt) {
+          console.warn('clientDisconnected ', evt.detail.clientId);
+        });
+      }
+    </script>
+      </body>
+    </html>

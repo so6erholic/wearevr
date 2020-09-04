@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+    <head>
+        <title>L14 - Loading and displaying 3D models</title>
+        <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+        
+    </head>
+    <body>
+        <!doctype html>
+
+        <!-- ******** NOTHING HAS CHANGED WITH v1.0.4 ******** -->
+      
+            <!-- Asset Management System -->
+       
+        
+           
+            
+            <!-- Ground -->
+
+    
+
+        <!-- ******** SOME THINGS HAVE CHANGED WITH v1.0.4 ******** -->
+        <!-- To correct the texture color in 3D models, you want to attache the renderer component
+             to the <a-scene> element and then set the colorManagement property to true (line 13).
+             More details about the Linear and sRGB color space issue here:
+             https://github.com/aframevr/aframe/issues/3509 -->
+        <a-scene renderer="colorManagement: true">
+            <!-- Asset Management System -->
+            <!-- **** IMPORTANT **** Due to the website policies, I cannot distribute the 3D models
+                 that I use in the video. Please download the 3D models yourself, or use your own,
+                 and then move them to the ASSETs folder -->
+            <a-assets>
+             
+                <img id="floor" src="Textures/ConcreteFloor.jpg">
+             
+                <a-asset-item id="your-3Dmodel-01" src="archive/model.gltf"></a-asset-item>
+       
+              
+            </a-assets>
+            
+            <!-- Floor -->
+            <a-plane position = "0 1.2 0" material="color: #FFFFFF;
+                               src: #floor;
+                               repeat: 5 5;
+                               normal-map: #floor-NRM;
+                               normal-texture-repeat: 5 5"
+                     rotation="-90 0 0"
+                     
+                     scale="10 10 1">
+            </a-plane>
+            
+            <!-- Camera -->
+
+            
+            <!-- Your 3D Model 01 -->
+            <a-entity position ="0 -0.1 0" gltf-model="#your-3Dmodel-01">
+            <a-camera user-height = "1.6"
+                      active="false"></a-camera>
+            </a-entity>
+            
+            <!-- Your 3D Model 02 -->
+
+            
+        </a-scene>
+    </body>
+</html>
